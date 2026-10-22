@@ -26,13 +26,13 @@ SVG-файлы в `design/` — справочные макеты интерфе
 
 | Экран | Макет |
 | --- | --- |
-| 1 — состояние и прогресс | [screen-1.svg](design/screen-1.svg) |
-| 2 — температуры | [screen-2.svg](design/screen-2.svg) |
-| 3 — профили материалов | [screen-3.svg](design/screen-3.svg) |
-| 4 — дата и время | [screen-4.svg](design/screen-4.svg) |
-| 5 — настройка сети | [screen-5.svg](design/screen-5.svg) |
-| 6 — подключение к Wi-Fi | [screen-6.svg](design/screen-6.svg) |
-| 7 — нет связи с принтером | [screen-7.svg](design/screen-7.svg) |
+| 1 — состояние и прогресс | [![Экран 1 — состояние и прогресс](design/screen-1.svg)](design/screen-1.svg) |
+| 2 — температуры | [![Экран 2 — температуры](design/screen-2.svg)](design/screen-2.svg) |
+| 3 — профили материалов | [![Экран 3 — профили материалов](design/screen-3.svg)](design/screen-3.svg) |
+| 4 — дата и время | [![Экран 4 — дата и время](design/screen-4.svg)](design/screen-4.svg) |
+| 5 — настройка сети | [![Экран 5 — настройка сети](design/screen-5.svg)](design/screen-5.svg) |
+| 6 — подключение к Wi-Fi | [![Экран 6 — подключение к Wi-Fi](design/screen-6.svg)](design/screen-6.svg) |
+| 7 — нет связи с принтером | [![Экран 7 — нет связи с принтером](design/screen-7.svg)](design/screen-7.svg) |
 
 ## 3D-модели
 
