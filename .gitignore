@@ -1,0 +1,28 @@
+# PlatformIO
+/.pio/
+/.pioenvs/
+/.piolibdeps/
+/.vscode/.browse.c*
+/.vscode/c_cpp_properties.json
+/.vscode/launch.json
+/.vscode/ipch/
+
+# Compiled firmware and build output
+/build/
+*.bin
+*.elf
+*.hex
+*.map
+*.uf2
+*.log
+
+# Local credentials or settings
+credentials.h
+secrets.h
+secrets.*
+local_config.h
+wifi_settings.*
+
+# Operating system files
+.DS_Store
+Thumbs.db
