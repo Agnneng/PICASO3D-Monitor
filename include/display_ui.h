@@ -6,6 +6,23 @@
 
 #include "picaso_protocol.h"
 
+enum class WeatherIcon : uint8_t {
+  Cloud,
+  Sun,
+  PartlyCloudy,
+  Rain,
+  Snowflake,
+  Lightning
+};
+
+struct WeatherSnapshot {
+  bool valid = false;
+  int16_t currentTemperatureC = 0;
+  int16_t tomorrowMaximumC = 0;
+  String condition;
+  WeatherIcon icon = WeatherIcon::Cloud;
+};
+
 class DisplayUI {
  public:
   void begin(uint16_t rotationDegrees);
@@ -17,7 +34,9 @@ class DisplayUI {
                      const String& deviceIp,
                      bool wifiConnected,
                      const String& clockTime,
-                     const String& clockDate);
+                     const String& clockDate,
+                     const WeatherSnapshot& weather,
+                     const String& weatherCity);
 
  private:
   enum class ScreenMode : uint8_t { Blank, WifiConnecting, SetupPortal, Dashboard };
@@ -47,6 +66,7 @@ class DisplayUI {
   String lastMaterial2_;
   String lastClockTime_;
   String lastClockDate_;
+  String lastWeatherValues_;
   String lastSetupAddress_;
   uint16_t lastStatusColor_ = 0;
   uint16_t lastProgressColor_ = 0;

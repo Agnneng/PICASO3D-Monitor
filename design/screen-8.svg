@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<svg xmlns="http://www.w3.org/2000/svg" width="484" height="484" viewBox="0 0 242 242" role="img" aria-labelledby="title description">
+  <title id="title">PICASO3D Monitor — экран погоды</title>
+  <desc id="description">Круглый экран погоды. Температуры выше 15 градусов жёлтые, от 5 до 15 серые, ниже 5 синие. Кольцо зелёное во время печати и серое в остальных случаях.</desc>
+  <defs>
+    <clipPath id="display-mask"><circle cx="121" cy="121" r="119"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#display-mask)" font-family="Arial, sans-serif">
+    <circle cx="121" cy="121" r="119" fill="#2B2A29"/>
+
+    <!-- На макете принтер простаивает, поэтому кольцо серое. Во время печати прошивка окрашивает пройденный участок в зелёный. -->
+    <circle cx="121" cy="121" r="110" fill="none" stroke="#D9DADA" stroke-width="12"/>
+
+    <!-- Пример: переменная облачность — жёлтое солнце за серым облаком. -->
+    <g fill="none" stroke="#FFED00" stroke-width="2.4" stroke-linecap="round">
+      <line x1="69" y1="67" x2="69" y2="60"/>
+      <line x1="57" y1="72" x2="52" y2="67"/>
+      <line x1="81" y1="72" x2="86" y2="67"/>
+      <line x1="54" y1="84" x2="47" y2="84"/>
+      <line x1="84" y1="84" x2="91" y2="84"/>
+    </g>
+    <circle cx="69" cy="80" r="10" fill="#FFED00"/>
+    <path d="M47 101h47c8 0 13-4 13-10 0-6-5-10-12-10-3-9-11-14-20-12-8 2-12 7-14 14-8 0-13 4-13 10 0 5 4 8 9 8z"
+          fill="#2B2A29" stroke="#B2B3B3" stroke-width="2.4" stroke-linejoin="round"/>
+
+    <!-- +30 °C: выше +15 °C, поэтому жёлтый. -->
+    <text x="163" y="89" text-anchor="middle" fill="#FFED00" font-size="38" font-weight="700">+30°</text>
+
+    <line x1="46" y1="121" x2="196" y2="121" stroke="#C5C6C6" stroke-width="1.5"/>
+
+    <text x="52" y="144" fill="#C5C6C6" font-size="14" font-weight="400">Завтра</text>
+    <!-- -20 °C: ниже +5 °C, поэтому синий. -->
+    <text x="78" y="181" text-anchor="middle" fill="#00A0E3" font-size="25" font-weight="700">-20°</text>
+    <text x="112" y="144" fill="#C5C6C6" font-size="14" font-weight="400">Облачно с</text>
+    <text x="112" y="161" fill="#C5C6C6" font-size="14" font-weight="400">прояснениями</text>
+  </g>
+</svg>

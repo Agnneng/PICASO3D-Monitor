@@ -290,6 +290,114 @@ void drawChamberIcon(int16_t x, int16_t y) {
                     Screen2Icons::kChamberHeight);
 }
 
+void drawWeatherCloud(int16_t x, int16_t y, uint16_t color) {
+  const int16_t points[][2] = {
+      {5, 40},  {53, 40}, {61, 40}, {67, 35}, {68, 28}, {68, 21},
+      {62, 16}, {54, 16}, {51, 5},  {41, 0},  {31, 2},  {23, 9},
+      {21, 17}, {12, 17}, {6, 22},  {1, 29},  {1, 35},  {5, 40}};
+  for (uint8_t i = 1; i < sizeof(points) / sizeof(points[0]); ++i) {
+    lcd.drawLine(x + points[i - 1][0], y + points[i - 1][1],
+                 x + points[i][0], y + points[i][1], color);
+    if (i > 1 && i < 17) {
+      lcd.drawLine(x + points[i - 1][0], y + points[i - 1][1] + 1,
+                   x + points[i][0], y + points[i][1] + 1, color);
+    }
+  }
+}
+
+uint16_t weatherTemperatureColor(int16_t temperatureC) {
+  if (temperatureC > 15) return kIpYellow;
+  if (temperatureC >= 5) return kLine;
+  return kBrandBlue;
+}
+
+void drawWeatherSun(int16_t centerX, int16_t centerY, uint16_t color) {
+  constexpr int16_t kInnerRadius = 12;
+  constexpr int16_t kOuterRadius = 19;
+  for (int16_t angle = 0; angle < 360; angle += 45) {
+    const float radians = angle * DEG_TO_RAD;
+    const int16_t x1 = centerX + static_cast<int16_t>(lroundf(cosf(radians) * kInnerRadius));
+    const int16_t y1 = centerY + static_cast<int16_t>(lroundf(sinf(radians) * kInnerRadius));
+    const int16_t x2 = centerX + static_cast<int16_t>(lroundf(cosf(radians) * kOuterRadius));
+    const int16_t y2 = centerY + static_cast<int16_t>(lroundf(sinf(radians) * kOuterRadius));
+    lcd.drawLine(x1, y1, x2, y2, color);
+    lcd.drawLine(x1 + 1, y1, x2 + 1, y2, color);
+  }
+  lcd.fillCircle(centerX, centerY, 9, color);
+}
+
+void drawWeatherRain(int16_t x, int16_t y, uint16_t color) {
+  drawWeatherCloud(x, y, color);
+  lcd.drawLine(x + 18, y + 39, x + 14, y + 47, color);
+  lcd.drawLine(x + 37, y + 39, x + 33, y + 47, color);
+  lcd.drawLine(x + 56, y + 39, x + 52, y + 47, color);
+}
+
+void drawWeatherSnowflake(int16_t centerX, int16_t centerY, uint16_t color) {
+  constexpr float kDirections[6][2] = {
+      {1.0f, 0.0f}, {-1.0f, 0.0f}, {0.5f, 0.866f},
+      {-0.5f, -0.866f}, {0.5f, -0.866f}, {-0.5f, 0.866f}};
+  for (uint8_t i = 0; i < 6; ++i) {
+    const float dx = kDirections[i][0];
+    const float dy = kDirections[i][1];
+    const int16_t tipX = centerX + static_cast<int16_t>(lroundf(dx * 19.0f));
+    const int16_t tipY = centerY + static_cast<int16_t>(lroundf(dy * 19.0f));
+    lcd.drawLine(centerX, centerY, tipX, tipY, color);
+
+    const int16_t branchX = centerX + static_cast<int16_t>(lroundf(dx * 11.0f));
+    const int16_t branchY = centerY + static_cast<int16_t>(lroundf(dy * 11.0f));
+    for (int8_t side = -1; side <= 1; side += 2) {
+      const int16_t endX = branchX + static_cast<int16_t>(lroundf(-dx * 4.0f - side * dy * 4.0f));
+      const int16_t endY = branchY + static_cast<int16_t>(lroundf(-dy * 4.0f + side * dx * 4.0f));
+      lcd.drawLine(branchX, branchY, endX, endY, color);
+    }
+  }
+}
+
+void drawWeatherLightning(int16_t centerX, int16_t centerY, uint16_t color) {
+  const int16_t points[][2] = {
+      {static_cast<int16_t>(centerX + 5), static_cast<int16_t>(centerY - 20)},
+      {static_cast<int16_t>(centerX - 8), static_cast<int16_t>(centerY + 1)},
+      {static_cast<int16_t>(centerX + 1), static_cast<int16_t>(centerY + 1)},
+      {static_cast<int16_t>(centerX - 5), static_cast<int16_t>(centerY + 20)},
+      {static_cast<int16_t>(centerX + 10), static_cast<int16_t>(centerY - 4)},
+      {static_cast<int16_t>(centerX + 2), static_cast<int16_t>(centerY - 4)},
+      {static_cast<int16_t>(centerX + 5), static_cast<int16_t>(centerY - 20)}};
+  for (uint8_t i = 1; i < sizeof(points) / sizeof(points[0]); ++i) {
+    lcd.drawLine(points[i - 1][0], points[i - 1][1], points[i][0], points[i][1], color);
+    lcd.drawLine(points[i - 1][0] + 1, points[i - 1][1],
+                 points[i][0] + 1, points[i][1], color);
+  }
+}
+
+void drawWeatherIcon(int16_t x, int16_t y, WeatherIcon icon) {
+  const int16_t centerX = x + 34;
+  const int16_t centerY = y + 21;
+  switch (icon) {
+    case WeatherIcon::Sun:
+      drawWeatherSun(centerX, centerY, kIpYellow);
+      break;
+    case WeatherIcon::PartlyCloudy:
+      drawWeatherSun(x + 25, y + 13, kIpYellow);
+      drawWeatherCloud(x, y + 5, kLine);
+      break;
+    case WeatherIcon::Rain:
+      drawWeatherRain(x, y, kBrandBlue);
+      break;
+    case WeatherIcon::Snowflake:
+      drawWeatherSnowflake(centerX, centerY, kBrandBlue);
+      break;
+    case WeatherIcon::Lightning:
+      drawWeatherCloud(x, y, kLine);
+      drawWeatherLightning(centerX, centerY + 4, kIpYellow);
+      break;
+    case WeatherIcon::Cloud:
+    default:
+      drawWeatherCloud(x, y, kLine);
+      break;
+  }
+}
+
 void drawProgressRing(int progress, bool printing) {
   const bool showProgress = printing && progress > 0;
   const float sweepDegrees =
@@ -639,7 +747,9 @@ void DisplayUI::showDashboard(const PicasoDiscovery& discovery,
                               const String& deviceIp,
                               bool wifiConnected,
                               const String& clockTime,
-                              const String& clockDate) {
+                              const String& clockDate,
+                              const WeatherSnapshot& weather,
+                              const String& weatherCity) {
   const bool printerAvailable = wifiConnected && snapshot.connected && snapshot.valid;
   const uint32_t now = millis();
   const bool enteringDashboard = screenMode_ != ScreenMode::Dashboard;
@@ -690,14 +800,23 @@ void DisplayUI::showDashboard(const PicasoDiscovery& discovery,
     return;
   }
 
-  static const uint8_t screenSequence[] = {0, 1, 3, 2, 0, 3, 1, 2, 3};
+  static const uint8_t screenSequence[] = {0, 1, 3, 2, 0, 3, 1, 2, 3, 5};
+  const uint8_t sequenceLength = weatherCity.length() ? 10 : 9;
   uint8_t page;
   if (!printerAvailable) {
-    const uint32_t noPrinterCycle = (now - dashboardStartedAt_) % 20000UL;
-    page = noPrinterCycle < 3000UL ? 4 : 3;
+    const bool showWeather = weatherCity.length() != 0;
+    const uint32_t noPrinterCycle =
+        (now - dashboardStartedAt_) % (showWeather ? 25000UL : 20000UL);
+    if (noPrinterCycle < 3000UL) {
+      page = 4;
+    } else if (noPrinterCycle < 20000UL) {
+      page = 3;
+    } else {
+      page = 5;
+    }
   } else {
     const uint8_t screenSlot = static_cast<uint8_t>(
-        ((now - dashboardStartedAt_) / 5000UL) % sizeof(screenSequence));
+        ((now - dashboardStartedAt_) / 5000UL) % sequenceLength);
     page = screenSequence[screenSlot];
   }
   const bool pageChanged = dashboardPage_ != page;
@@ -714,6 +833,7 @@ void DisplayUI::showDashboard(const PicasoDiscovery& discovery,
     lastMaterial2_ = "";
     lastClockTime_ = "";
     lastClockDate_ = "";
+    lastWeatherValues_ = "";
     lastSetupAddress_ = "";
     lastStatusColor_ = 0;
     lastProgressColor_ = 0;
@@ -731,6 +851,8 @@ void DisplayUI::showDashboard(const PicasoDiscovery& discovery,
       drawNozzleIcon(51, 142, 2);
     } else if (page == 3) {
       lcd.drawFastHLine(46, 121, 148, kLine);
+    } else if (page == 5) {
+      lcd.drawFastHLine(46, 120, 148, kLine);
     } else if (page == 4) {
       drawStaticRing(kBrandBlue);
       drawArialCentered(kCenter, 46, ArialRaster::kArialBold20, kBrandBlue,
@@ -852,6 +974,47 @@ void DisplayUI::showDashboard(const PicasoDiscovery& discovery,
       drawArialCentered(kCenter, 172, ArialRaster::kArialBold25, kLine, clockDate);
       lastClockDate_ = clockDate;
     }
+  } else if (page == 5) {
+    const String weatherValues = weather.valid
+        ? String(weather.currentTemperatureC) + "|" +
+              String(weather.tomorrowMaximumC) + "|" + weather.condition + "|" +
+              String(static_cast<uint8_t>(weather.icon))
+        : String("unavailable");
+    if (weatherValues != lastWeatherValues_) {
+      clearDashboardRect(36, 58, 168, 49);
+      drawWeatherIcon(42, 60, weather.valid ? weather.icon : WeatherIcon::Cloud);
+      if (weather.valid) {
+        String current = weather.currentTemperatureC > 0 ? "+" : "";
+        current += String(weather.currentTemperatureC) + "°";
+        drawArialCentered(162, 88, ArialRaster::kArialBold40,
+                          weatherTemperatureColor(weather.currentTemperatureC),
+                          current);
+      } else {
+        drawArialCentered(160, 88, ArialRaster::kArialBold12, kMuted,
+                          "НЕТ ДАННЫХ");
+      }
+      clearDashboardRect(38, 128, 164, 62);
+      if (weather.valid) {
+        String tomorrow = weather.tomorrowMaximumC > 0 ? "+" : "";
+        tomorrow += String(weather.tomorrowMaximumC) + "°";
+        drawArialText(52, 143, ArialRaster::kArialRegular14, kLine, "Завтра");
+        drawArialCentered(78, 181, ArialRaster::kArialBold25,
+                          weatherTemperatureColor(weather.tomorrowMaximumC),
+                          tomorrow);
+        if (weather.condition == "Облачно с прояснениями") {
+          drawArialText(112, 143, ArialRaster::kArialRegular14, kLine,
+                        "Облачно с");
+          drawArialText(112, 160, ArialRaster::kArialRegular14, kLine,
+                        "прояснениями");
+        } else {
+          drawArialText(112, 143, ArialRaster::kArialRegular14, kLine,
+                        fitArialText(weather.condition, 90,
+                                     ArialRaster::kArialRegular14));
+        }
+      }
+      lastWeatherValues_ = weatherValues;
+    }
+    lcd.drawFastHLine(46, 120, 148, kLine);
   } else {
     const String deviceAddress = wifiConnected && deviceIp != "0.0.0.0"
                                      ? deviceIp : String("--");
