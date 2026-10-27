@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
-<svg xmlns="http://www.w3.org/2000/svg" width="484" height="484" viewBox="0 0 242 242" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="242" height="242" viewBox="0 0 242 242" role="img" aria-labelledby="title description">
   <title id="title">PICASO3D Monitor — экран погоды</title>
   <desc id="description">Круглый экран погоды. Температуры выше 15 градусов жёлтые, от 5 до 15 серые, ниже 5 синие. Кольцо зелёное во время печати и серое в остальных случаях.</desc>
   <defs>

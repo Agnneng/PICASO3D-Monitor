@@ -37,7 +37,7 @@ SVG-файлы в `design/` — справочные макеты интерфе
 | 5 — настройка сети | [![Экран 5 — настройка сети](design/screen-5.svg)](design/screen-5.svg) |
 | 6 — подключение к Wi-Fi | [![Экран 6 — подключение к Wi-Fi](design/screen-6.svg)](design/screen-6.svg) |
 | 7 — нет связи с принтером | [![Экран 7 — нет связи с принтером](design/screen-7.svg)](design/screen-7.svg) |
-| 8 — погода | [![Экран 8 — погода](design/screen-8-preview.png)](design/screen-8.svg) |
+| 8 — погода | [![Экран 8 — погода](design/screen-8.svg)](design/screen-8.svg) |
 
 ## Настройка погоды и API-ключа
 
